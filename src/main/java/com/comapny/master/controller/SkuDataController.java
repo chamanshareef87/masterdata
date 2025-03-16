@@ -8,25 +8,27 @@ import org.springframework.web.multipart.MultipartFile;
 import com.comapny.master.entity.SkuData;
 import com.comapny.master.service.SkuDataService;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 @CrossOrigin
 @RestController
 @RequestMapping("/api/sku")
 public class SkuDataController {
 
+	
     @Autowired
     private SkuDataService skuDataService;
 
     @PostMapping("/upload")
     public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
         try {
-        	System.out.println("file="+file.getBytes());
+        	System.out.println("file==================="+file);
             skuDataService.saveExcelData(file);
             return new ResponseEntity<>("File uploaded and data saved successfully!", HttpStatus.OK);
-        } catch (IOException e) {
+        } catch (Exception e) {
+        	System.out.println("Exception in file upload controller");
+        	e.printStackTrace();
             return new ResponseEntity<>("Failed to upload file: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
